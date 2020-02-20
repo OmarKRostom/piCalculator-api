@@ -4,12 +4,48 @@
   "description": "This is the backend service for piCalculator",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "NODE_ENV=development npm run clean && npm run transpile && node ./dist/app.js",
+    "transpile": "babel ./source --out-dir dist",
+    "clean": "rm -rf dist-server",
+    "prod": "NODE_ENV=production npm run clean && npm run transpile",
+    "watch": "nodemon"
   },
-  "author": "",
+  "nodemonConfig": {
+    "exec": "npm run dev",
+    "watch": [
+      "server/*",
+      "public/*"
+    ],
+    "ignore": [
+      "**/__tests__/**",
+      "*.test.js",
+      "*.spec.js"
+    ]
+  },
+  "author": "Omar K. Rostom",
   "license": "ISC",
   "dependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongodb": "^3.5.3"
+    "mongodb": "^3.5.3",
+    "nodemon": "^2.0.2",
+    "rimraf": "^3.0.2"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmarKRostom/piCalculator-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OmarKRostom/piCalculator-api/issues"
+  },
+  "homepage": "https://github.com/OmarKRostom/piCalculator-api#readme",
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
   }
 }
