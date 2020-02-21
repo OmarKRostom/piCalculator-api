@@ -6,7 +6,7 @@ const localPi = {
     value: 3,
     multiplier: 1,
     leastDenimenator: 2,
-    decimalPoint: 0
+    decimalPoint: 1
 }
 
 /**
