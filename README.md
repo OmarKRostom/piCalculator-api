@@ -37,5 +37,5 @@ brew install node or sudo apt get install node
 - Check `package.json` to run the preferred script.
 
 ### Live Demo
-- Retreive latest pi value: http://128.199.155.19:3000/pi
-- Reset pi to least accurate value: http://128.199.155.19:3000/pi/reset
+- Retreive latest pi value: https://api.rostom.dev/pi
+- Reset pi to least accurate value: https://api.rostom.dev/pi/reset
