@@ -4,6 +4,8 @@ const piCollection = "piCollection"
 const localPi = {
     _id: 1,
     value: 3,
+    multiplier: 1,
+    leastDenimenator: 2,
     decimalPoint: 1
 }
 
@@ -73,9 +75,13 @@ export const resetPi = (req, res) => {
 
 /**
  * Increase pi accuracy by calling this function
+ * Implementing Nilakantha series forumla
  * @param {*} lastPi 
  */
 const calcaulatePi = (lastPi) => {
-    lastPi.value = parseFloat(Math.PI.toFixed(lastPi.decimalPoint++))
+    lastPi.value += parseFloat(((lastPi.multiplier) * (4/(lastPi.leastDenimenator * (lastPi.leastDenimenator + 1) * (lastPi.leastDenimenator + 2)))))
+    lastPi.value = parseFloat(lastPi.value.toFixed(++lastPi.decimalPoint))
+    lastPi.multiplier *= -1
+    lastPi.leastDenimenator += 2
     return lastPi
 }
