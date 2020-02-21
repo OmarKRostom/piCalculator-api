@@ -38,6 +38,15 @@ export const getLatestPi = (req, res) => {
 export const updatePi = (pi = null) => {
     pi = calcaulatePi(pi)
     dbClient.db(process.env.DB_NAME).collection(piCollection).replaceOne({_id: 1}, pi, (err, result) => {
+        if (err) {
+            res.status = 500
+            res.send({
+                'status': 'failure',
+                'err': err
+            })
+            return
+        }
+
         console.log("Pi value update successfully: ", pi)
     }, { upsert: true })
 }
