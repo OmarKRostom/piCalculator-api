@@ -17,8 +17,8 @@ export const getLatestPi = (req, res) => {
     .db(process.env.DB_NAME).collection(piCollection).find({
         _id: 1
     }).toArray((err, result) => {
-        console.log(result[0])
-        if (result == null) {
+        //Since the query is .toArray, access the first Item
+        if (result[0] == null) {
             //Create the first value of Pi            
             res.json(localPi)
             //Update api with first value of PI
