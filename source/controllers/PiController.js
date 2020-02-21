@@ -18,7 +18,7 @@ export const getLatestPi = (req, res) => {
         _id: 1
     }).toArray((err, result) => {
         //Since the query is .toArray, access the first Item
-        if (result[0] == null) {
+        if (result == null || result[0] == null) {
             //Create the first value of Pi            
             res.json(localPi)
             //Update api with first value of PI
@@ -48,6 +48,7 @@ export const updatePi = (pi = null) => {
 export const resetPi = (req, res) => {
     dbClient.db(process.env.DB_NAME).collection(piCollection).replaceOne({_id: 1}, localPi, (err, result) => {
         if (err) {
+            res.status = 500
             res.send({
                 'status': 'failure',
                 'err': err
