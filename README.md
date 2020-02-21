@@ -35,3 +35,7 @@ brew install node or sudo apt get install node
   DB_NAME=<DB_NAME>
   ```
 - Check `package.json` to run the preferred script.
+
+### Live Demo
+- Retreive latest pi value: `http://128.199.155.19:3000/pi`
+- Reset pi to least accurate value: `http://128.199.155.19:3000/pi/reset`
