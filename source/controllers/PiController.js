@@ -1,76 +1,60 @@
-import dbClient from '../db/dbClient'
+import * as piRepository from '../repositories/PiRepository'
 
-const piCollection = "piCollection"
-const localPi = {
-    _id: 1,
-    value: 3,
-    multiplier: 1,
-    leastDenimenator: 2,
-    decimalPoint: 1
+export const getLatestPi = async (req, res) => {
+    let piResult = piRepository.getLatestPi()
+
+    piResult.then((result) => {
+        res.send(result)
+    }, err => {
+        res.send({
+            status: "Failure",
+            code: 500,
+            error: err
+        })
+    })
 }
 
-/**
- * Call this function to retrieve latest Pi value
- * @param {*} req 
- * @param {*} res 
- */
-export const getLatestPi = (req, res) => {
-    dbClient
-    .db(process.env.DB_NAME).collection(piCollection).find({
-        _id: 1
-    }).toArray((err, result) => {
-        //Since the query is .toArray, access the first Item
-        if (result == null || result[0] == null) {
-            //Create the first value of Pi            
-            res.json(localPi)
-            //Update api with first value of PI
-            updatePi(localPi)
-        } else {
-            res.json(result[0])
-            //Update api with first value of PI
-            updatePi(result[0])
-        }
+export const resetPi = async (req, res) => {
+    let piResult = piRepository.resetPi()
+
+    piResult.then((result) => {
+        res.send(result)
+    }, err => {
+        res.send({
+            status: "Failure",
+            code: 500,
+            error: err
+        })
     })
 }
 
 /**
- * Use this function to update Pi value
- * @param {*} pi 
+ * Update pi function that will be called by the cron job
+ * @param {*} req 
+ * @param {*} res 
  */
-export const updatePi = (pi = null) => {
-    pi = calcaulatePi(pi)
-    dbClient.db(process.env.DB_NAME).collection(piCollection).replaceOne({_id: 1}, pi, (err, result) => {
-        if (err) {
-            res.status = 500
-            res.send({
-                'status': 'failure',
-                'err': err
+export const updatePi = async () => {
+    let latestPiResult = piRepository.getLatestPi()
+
+    latestPiResult.then(async (result) => {
+        let updatePiRequest = piRepository.updatePi(calcaulatePi(result))
+
+        updatePiRequest.then((resultPiUpdate) => {
+            console.log(resultPiUpdate)
+        }, errPiUpdate => {
+            console.log({
+                status: "Failure",
+                code: 500,
+                error: errPiUpdate
             })
-            return
-        }
-
-        console.log("Pi value update successfully: ", pi)
-    }, { upsert: true })
-}
-
-/**
- * Use this function to reset Pi value to starting one (3)
- */
-export const resetPi = (req, res) => {
-    dbClient.db(process.env.DB_NAME).collection(piCollection).replaceOne({_id: 1}, localPi, (err, result) => {
-        if (err) {
-            res.status = 500
-            res.send({
-                'status': 'failure',
-                'err': err
-            })
-            return
-        }
-
-        res.send({
-            'status': 'success'
         })
-    }, { upsert: true })
+    }, err => {
+        console.log({
+            status: "Failure",
+            code: 500,
+            error: err
+        })
+    })
 }
 
 /**
@@ -78,7 +62,7 @@ export const resetPi = (req, res) => {
  * Implementing Nilakantha series forumla
  * @param {*} lastPi 
  */
-const calcaulatePi = (lastPi) => {
+export const calcaulatePi = (lastPi) => {
     lastPi.value += parseFloat(((lastPi.multiplier) * (4/(lastPi.leastDenimenator * (lastPi.leastDenimenator + 1) * (lastPi.leastDenimenator + 2)))))
     lastPi.value = parseFloat(lastPi.value.toFixed(++lastPi.decimalPoint))
     lastPi.multiplier *= -1
