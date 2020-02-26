@@ -64,7 +64,7 @@ export const updatePi = async () => {
  */
 export const calcaulatePi = (lastPi) => {
     lastPi.value += parseFloat(((lastPi.multiplier) * (4/(lastPi.leastDenimenator * (lastPi.leastDenimenator + 1) * (lastPi.leastDenimenator + 2)))))
-    lastPi.value = parseFloat(lastPi.value.toFixed(++lastPi.decimalPoint))
+    lastPi.value = parseFloat(lastPi.value.toFixed((lastPi.decimalPoint == 20) ? lastPi.decimalPoint : ++lastPi.decimalPoint))
     lastPi.multiplier *= -1
     lastPi.leastDenimenator += 2
     return lastPi
